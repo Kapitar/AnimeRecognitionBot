@@ -1,25 +1,28 @@
+"""Provides detect-categoried commands"""
 from aiogram import Router, F
 from aiogram.filters import Text
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message,  ReplyKeyboardRemove
+from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.fsm.state import StatesGroup, State
 
-from keyboards.menu_keyboard import menu_anime_detect_button, menu_human_to_anime_button
+from keyboards.menu_keyboard import MENU_ANIME_DETECT_BUTTON, MENU_HUMAN_TO_ANIME_BUTTON
 from keyboards.back_keyboard import back_keyboard
 from texts import client_text as texts
-import utils.images as images
+from utils import images
 from utils.constants import MIN_SIZE
 
 router = Router()
 
 
 class DetectAnime(StatesGroup):
+    """FSM for anime detection scene"""
     waiting_for_image = State()
 
 
-@router.message(Text(menu_anime_detect_button))
-@router.message(Text(menu_human_to_anime_button))
+@router.message(Text(MENU_ANIME_DETECT_BUTTON))
+@router.message(Text(MENU_HUMAN_TO_ANIME_BUTTON))
 async def wait_for_image(message: Message, state: FSMContext):
+    """Setting a state for waiting for image"""
     await message.answer(texts.WAITING_FOR_IMAGE, reply_markup=back_keyboard)
     await state.set_state(DetectAnime.waiting_for_image)
     await state.update_data(mode_type=message.text)
@@ -27,6 +30,7 @@ async def wait_for_image(message: Message, state: FSMContext):
 
 @router.message(DetectAnime.waiting_for_image, F.photo)
 async def image_chosen(message: Message, state: FSMContext):
+    """Render an image"""
     photo_size = message.photo[-1]
     if photo_size.width < MIN_SIZE or photo_size.height < MIN_SIZE:
         return await message.answer(texts.BAD_IMAGE_ERROR)
@@ -36,7 +40,7 @@ async def image_chosen(message: Message, state: FSMContext):
 
     await message.answer(texts.WAIT_FOR_RENDER, reply_markup=ReplyKeyboardRemove())
     user_data = await state.get_data()
-    if user_data['mode_type'] == menu_anime_detect_button:
+    if user_data['mode_type'] == MENU_ANIME_DETECT_BUTTON:
         pass
     else:
         pass
@@ -44,4 +48,5 @@ async def image_chosen(message: Message, state: FSMContext):
 
 @router.message(DetectAnime.waiting_for_image)
 async def image_chosen_incorrectly(message: Message):
+    """Raise an error if the message is not an image"""
     await message.answer(texts.NOT_IMAGE_ERROR, reply_markup=back_keyboard)
