@@ -1,5 +1,12 @@
 from aiogram import types
 
-menu_button = "Распознать аниме персонажа"
+menu_anime_detect_button = "Распознать аниме персонажа"
+menu_human_to_anime_button = "На кого ты похож из аниме"
 
-menu_keyboard = types.ReplyKeyboardMarkup(keyboard=[[types.KeyboardButton(text=menu_button)]], resize_keyboard=True)
+row = [
+    types.KeyboardButton(text=menu_anime_detect_button),
+    types.KeyboardButton(text=menu_human_to_anime_button),
+]
+
+
+menu_keyboard = types.ReplyKeyboardMarkup(keyboard=[row], resize_keyboard=True)
