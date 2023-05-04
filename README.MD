@@ -1,3 +1,11 @@
+<!-- PROJECT LOGO -->
+<br />
+<h3 align="center">Anime Recognition Bot</h3>
+<p align="center">
+ Telegram Bot that can recognize anime characters by picture
+ <br />
+</p>
+
 <!-- GETTING STARTED -->
 ## Getting Started
 
