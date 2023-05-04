@@ -1,5 +1,7 @@
+"""Keyboard for back actions"""
 from aiogram import types
 
-back_button = "Вернуться на главную"
+BACK_BUTTON = "Вернуться на главную"
 
-back_keyboard = types.ReplyKeyboardMarkup(keyboard=[[types.KeyboardButton(text=back_button)]], resize_keyboard=True)
+row = [types.KeyboardButton(text=BACK_BUTTON)]
+back_keyboard = types.ReplyKeyboardMarkup(keyboard=row, resize_keyboard=True)

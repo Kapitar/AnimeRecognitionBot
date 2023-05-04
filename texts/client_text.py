@@ -1,3 +1,4 @@
+"""Message templates"""
 from handlers.detect_anime import MIN_SIZE
 
 WELCOME_TEXT = '''
