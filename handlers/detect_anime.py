@@ -50,6 +50,7 @@ async def image_chosen(message: Message, state: FSMContext):
         answer += f'{iter}) {name} - {chance}%\n'
         iter += 1
 
+    await state.clear()
     await message.answer(answer, reply_markup=menu_keyboard)
 
 
