@@ -20,3 +20,7 @@ WAIT_FOR_RENDER = '''
 NOT_IMAGE_ERROR = '''
 Это не картинка, отправь картинку
 '''
+
+GUESS_ANIME = '''
+Вероятности:
+'''
