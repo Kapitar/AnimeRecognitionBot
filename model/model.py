@@ -5,7 +5,7 @@ import torch.nn as nn
 import pandas as pd
 from torchvision.models import resnet18
 
-from utils.constants import DEVICE, PATH_TO_MODEL, PATH_TO_TABLE
+from utils.constants import DEVICE, PATH_TO_MODEL, PATH_TO_TABLE, PATH_TO_NAMENUMS
 
 
 class Model(nn.Module):
@@ -34,11 +34,22 @@ model.double()
 model.eval()
 
 
-name_nums = pd.read_csv(PATH_TO_TABLE)
+name_nums = pd.read_csv(PATH_TO_NAMENUMS)
 girls_numbers = name_nums['number']
 girls_names = name_nums['name']
 number_to_name = dict(zip(girls_numbers, girls_names))
 name_to_number = dict(zip(girls_names, girls_numbers))
+
+merged = pd.read_csv(PATH_TO_TABLE)
+lst = merged.index
+names = merged['name']
+filepath = merged['filename']
+id_to_name = dict(zip(lst, names))
+name_to_id = dict(zip(names, lst))
+id_to_path = dict(zip(lst, filepath))
+
+print(name_to_id)
+print(id_to_path)
 
 
 def get_anime(tensor: torch.tensor) -> list:
@@ -50,6 +61,7 @@ def get_anime(tensor: torch.tensor) -> list:
     zipped_top5 = zip(top5.values, top5.indices)
     new_zipped_top5 = []
     for i, j in zipped_top5:
-        new_zipped_top5.append((round(float(i) * 100, 2), number_to_name[int(j)]))
+        name = number_to_name[int(j)]
+        new_zipped_top5.append((round(float(i) * 100, 2), name, id_to_path[name_to_id[f"['{name}']"]]))
 
     return new_zipped_top5

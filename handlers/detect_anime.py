@@ -2,7 +2,7 @@
 from aiogram import Router, F
 from aiogram.filters import Text
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, ReplyKeyboardRemove
+from aiogram.types import Message, ReplyKeyboardRemove, InputFile, FSInputFile
 from aiogram.fsm.state import StatesGroup, State
 
 import torch
@@ -46,12 +46,14 @@ async def image_chosen(message: Message, state: FSMContext):
     animes = get_anime(tensor)
     answer = texts.GUESS_ANIME + "\n"
     iter = 1
-    for chance, name in animes:
+    for chance, name, link in animes:
         answer += f'{iter}) {name} - {chance}%\n'
         iter += 1
 
     await state.clear()
-    await message.answer(answer, reply_markup=menu_keyboard)
+    path = f"files/faces/{animes[0][2]}"
+    photo = FSInputFile(path)
+    await message.answer_photo(photo,  caption=answer,reply_markup=menu_keyboard)
 
 
 @router.message(DetectAnime.waiting_for_image)
